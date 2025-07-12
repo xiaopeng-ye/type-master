@@ -1,0 +1,22 @@
+services:
+  type-master:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: type-master
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - type-master
+
+networks:
+  type-master:
+    driver: bridge 
